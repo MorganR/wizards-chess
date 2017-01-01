@@ -54,6 +54,7 @@
     <Compile Include="Chess\Pieces\Rook.cs" />
     <Compile Include="Chess\PieceType.cs" />
     <Compile Include="Chess\Position.cs" />
+    <Compile Include="Movement\Point2DSmall.cs" />
     <Compile Include="Movement\GridMotorMover.cs" />
     <Compile Include="Movement\IGridMotorMover.cs" />
     <Compile Include="Movement\Motors\IPreciseMotorMover.cs" />
