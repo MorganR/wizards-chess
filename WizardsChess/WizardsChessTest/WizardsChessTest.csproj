@@ -75,6 +75,7 @@
     <Compile Include="Movement\MovementPlannerTest1.cs" />
     <Compile Include="Movement\MovePerformerVisualizer.cs" />
     <Compile Include="Movement\MoveTesting.cs" />
+    <Compile Include="Movement\Point2DDisp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VoiceControl\Commands\CommandTest.cs" />
   </ItemGroup>

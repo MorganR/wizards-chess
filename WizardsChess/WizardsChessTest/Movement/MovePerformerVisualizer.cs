@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WizardsChess.Movement.Drv;
 using WizardsChess.Movement.Drv.Events;
+using WizardsChessTest.Movement;
 
 namespace WizardsChess.Movement
 {
@@ -18,7 +19,7 @@ namespace WizardsChess.Movement
 
 		public Task MovePieceAsync(IList<Point2D> steps)
 		{
-			Point2D convertedPoint;
+			Point2DDisp convertedPoint;
 			int i = 1;
 
 			ResetBoardRep();
@@ -70,11 +71,11 @@ namespace WizardsChess.Movement
 		}
 
 		//converts input Points to Matrix indicies;
-		public Point2D ConvertPoint(Point2D point)
+		public Point2DDisp ConvertPoint(Point2D point)
 		{
-			return new Point2D(ConvertX(point.X), ConvertY(point.Y));
+			return new Point2DDisp(ConvertX(point.X), ConvertY(point.Y));
 		}
-		//converts (-11_11 to 0_23)
+		//converts (-11_11 to 0_22)
 		public int ConvertX(int x)
 		{
 			return x + xOffset;
