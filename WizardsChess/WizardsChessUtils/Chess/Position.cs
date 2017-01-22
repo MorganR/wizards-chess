@@ -34,6 +34,12 @@ namespace WizardsChess.Chess
 			ColumnLetter = (ColumnLetter)pos.X;
 		}
 
+		public Position(Point2DSmall pos)
+		{
+			Row = pos.Y;
+			ColumnLetter = (ColumnLetter)pos.X;
+		}
+
 		public Position(Position pos)
 		{
 			Row = pos.Row;

@@ -74,9 +74,9 @@ namespace WizardsChess.Chess
 					{
 						if (!pieceLocationsByType.ContainsKey(piece.Type))
 						{
-							pieceLocationsByType[piece.Type] = new List<Point2D>();
+							pieceLocationsByType[piece.Type] = new List<Point2DSmall>();
 						}
-						pieceLocationsByType[piece.Type].Add(new Movement.Point2D(col, row));
+						pieceLocationsByType[piece.Type].Add(new Movement.Point2DSmall(col, row));
 					}
 				}
 			}
@@ -113,7 +113,7 @@ namespace WizardsChess.Chess
 				
 				// Remove a killed piece from our valid pieceLocationsByType list
 				var listOfEndPieceType = pieceLocationsByType[endPiece.Type];
-				listOfEndPieceType.Remove(new Point2D(endPosition));
+				listOfEndPieceType.Remove(new Point2DSmall(endPosition));
 #if DEBUG
 				changeTurn();
 				System.Diagnostics.Debug.WriteLine("num in captured after capture on captured team " + WhoseTurn + " is " + capturedPiecesByTeam[WhoseTurn].Count);
@@ -139,14 +139,14 @@ namespace WizardsChess.Chess
 			}
 			// Replace the old position for this piece with the new position in the pieceLocationsByType list
 			var listOfMovingPieceType = pieceLocationsByType[movingPiece.Type];
-			listOfMovingPieceType.Remove(new Point2D(startPosition));
-			listOfMovingPieceType.Add(new Point2D(endPosition));
+			listOfMovingPieceType.Remove(new Point2DSmall(startPosition));
+			listOfMovingPieceType.Add(new Point2DSmall(endPosition));
 
 			pastMoves.Add(move);
 			changeTurn();
 		}
 
-		public void Castle(Point2D initialRookPoint)
+		public void Castle(Point2DSmall initialRookPoint)
 		{
 			int rookDir = Math.Sign(initialRookPoint.X - KingCol);	//calculates the direction of the rook from the king initially
 
@@ -160,8 +160,8 @@ namespace WizardsChess.Chess
 			king.HasMoved = true;    //update King's HasMoved
 			//Replace the old position for the King with the new position in the pieceLocationsByType list
 			var listOfPieceType = pieceLocationsByType[PieceType.King];
-			listOfPieceType.Remove(new Point2D(initialKingPos));
-			listOfPieceType.Add(new Point2D(finalKingPos));
+			listOfPieceType.Remove(new Point2DSmall(initialKingPos));
+			listOfPieceType.Add(new Point2DSmall(finalKingPos));
 
 			//Move this Rook in boardMatrix
 			var rook = internalPieceAt(initialRookPoint);
@@ -173,7 +173,7 @@ namespace WizardsChess.Chess
 			//Replace the old position for this Rook with the new position in the pieceLocationsByType list
 			listOfPieceType = pieceLocationsByType[PieceType.Rook];
 			listOfPieceType.Remove(initialRookPoint);
-			listOfPieceType.Add(new Point2D(finalRookPos));	//TODO: figure out if this creation is unnecessary and casting is done automatically.
+			listOfPieceType.Add(new Point2DSmall(finalRookPos));	//TODO: figure out if this creation is unnecessary and casting is done automatically.
 
 			MoveSpecification move = new MoveSpecification(new Position(initialRookPoint), finalRookPos, null, true, true);
 			pastMoves.Add(move);
@@ -222,8 +222,8 @@ namespace WizardsChess.Chess
 
 			//Replace the old position for this piece with the new position in the pieceLocationsByType list
 			var listOfMovingPieceType = pieceLocationsByType[internalPieceAt(lastMove.Start).Type];
-			listOfMovingPieceType.Remove(lastMove.End);
-			listOfMovingPieceType.Add(lastMove.Start);
+			listOfMovingPieceType.Remove(new Point2DSmall(lastMove.End));
+			listOfMovingPieceType.Add(new Point2DSmall(lastMove.Start));
 
 			if (lastMove.Capture != null)   //if move being undone has a capture location, restore the most recently taken other team's piece to that location
 			{
@@ -246,7 +246,7 @@ namespace WizardsChess.Chess
 
 				// Add a captured piece to our valid pieceLocationsByType list
 				var listOfCapturedPieceType = pieceLocationsByType[internalPieceAt((Position)lastMove.Capture).Type];
-				listOfCapturedPieceType.Add((Position)lastMove.Capture);
+				listOfCapturedPieceType.Add(new Point2DSmall((Position)lastMove.Capture));
 #if DEBUG
 				System.Diagnostics.Debug.WriteLine("num in captured after restore for " + WhoseTurn + " is " + capturedPiecesByTeam[WhoseTurn].Count);
 				if (capturedPiecesByTeam[WhoseTurn].Count > 0)
@@ -276,19 +276,19 @@ namespace WizardsChess.Chess
 			king.HasMoved = false;  //set King HasMoved to false
 									//Update King Location in pieceLocationsByType
 			var listOfPieceType = pieceLocationsByType[PieceType.King];
-			listOfPieceType.Remove(movedKingPos);
-			listOfPieceType.Add(unMovedKingPos);
+			listOfPieceType.Remove(new Point2DSmall(movedKingPos));
+			listOfPieceType.Add(new Point2DSmall(unMovedKingPos));
 
 			//Move Rook back
 			var rook = internalPieceAt(lastMove.End);
-			SetPieceAt(new Point2D(lastMove.Start), rook);
-			SetPieceAtToNull(new Point2D(lastMove.End));
+			SetPieceAt(new Point2DSmall(lastMove.Start), rook);
+			SetPieceAtToNull(new Point2DSmall(lastMove.End));
 
 			rook.HasMoved = false;  //set Rook HasMoved to false
 									//Update Rook Location in pieceLocationsByType
 			listOfPieceType = pieceLocationsByType[PieceType.Rook];
-			listOfPieceType.Remove(new Point2D(lastMove.End));
-			listOfPieceType.Add(new Point2D(lastMove.Start));
+			listOfPieceType.Remove(new Point2DSmall(lastMove.End));
+			listOfPieceType.Add(new Point2DSmall(lastMove.Start));
 		}
 
 		//TODO: board reset
@@ -298,7 +298,7 @@ namespace WizardsChess.Chess
 			boardMatrix[p.Row, p.Column] = piece;
 		}
 
-		private void SetPieceAt(Point2D p2, ChessPiece piece)
+		private void SetPieceAt(Point2DSmall p2, ChessPiece piece)
 		{
 			boardMatrix[p2.Y, p2.X] = piece;
 		}
@@ -308,7 +308,7 @@ namespace WizardsChess.Chess
 			boardMatrix[p.Row, p.Column] = null;
 		}
 
-		private void SetPieceAtToNull(Point2D p2)
+		private void SetPieceAtToNull(Point2DSmall p2)
 		{
 			boardMatrix[p2.Y, p2.X] = null;
 		}
@@ -344,8 +344,8 @@ namespace WizardsChess.Chess
 			return boardMatrix[y, x];
 		}
 
-		//piece accessor by Point2D
-		public ChessPiece internalPieceAt(Point2D point)
+		//piece accessor by Point2DSmall
+		public ChessPiece internalPieceAt(Point2DSmall point)
 		{
 			return boardMatrix[point.Y, point.X];
 		}
@@ -369,8 +369,8 @@ namespace WizardsChess.Chess
 			}
 		}
 
-		//piece accessor by Point2D
-        public ChessPiece PieceAt(Point2D point)
+		//piece accessor by Point2DSmall
+        public ChessPiece PieceAt(Point2DSmall point)
         {
 			if (boardMatrix[point.Y, point.X] != null)
 			{
@@ -404,8 +404,8 @@ namespace WizardsChess.Chess
         public ChessTeam WhoseTurn;	//TODO: move to ChessLogic? Change to Private (and add modifiers and an accessor?)
 
 		private ChessPiece[,] boardMatrix;
-		private Dictionary<PieceType, IList<Point2D>> pieceLocationsByType = new Dictionary<PieceType, IList<Point2D>>();    //TODO: figure out how to expose pieceLocationsByType properly
-		public Dictionary<PieceType, IList<Point2D>> PieceLocationsByType
+		private Dictionary<PieceType, IList<Point2DSmall>> pieceLocationsByType = new Dictionary<PieceType, IList<Point2DSmall>>();    //TODO: figure out how to expose pieceLocationsByType properly
+		public Dictionary<PieceType, IList<Point2DSmall>> PieceLocationsByType
 		{
 			get
 			{

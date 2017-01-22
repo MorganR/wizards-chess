@@ -194,11 +194,11 @@ namespace WizardsChess
 			}
 			if (chessLogic.DoesMoveCapture((Position)moveCmd.Position, moveCmd.Destination))	//piece captured
 			{
-				await moveManager.MoveAsync(new Point2D((Position)moveCmd.Position), new Point2D(moveCmd.Destination), new Point2D(chessLogic.CaptureLocation((Position)moveCmd.Position, moveCmd.Destination)));
+				await moveManager.MoveAsync(new Point2DSmall((Position)moveCmd.Position), new Point2DSmall(moveCmd.Destination), new Point2DSmall(chessLogic.CaptureLocation((Position)moveCmd.Position, moveCmd.Destination)));
 			}
 			else
 			{
-				await moveManager.MoveAsync(new Point2D((Position)moveCmd.Position), new Point2D(moveCmd.Destination));
+				await moveManager.MoveAsync(new Point2DSmall((Position)moveCmd.Position), new Point2DSmall(moveCmd.Destination));
 			}
 			chessLogic.MovePiece((Position)moveCmd.Position, moveCmd.Destination);
 		}

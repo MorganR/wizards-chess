@@ -18,22 +18,34 @@ namespace WizardsChess.Movement
 		{
 			X = x;
 			Y = y;
+#if DEBUG
+			parameterCheck();
+#endif
 		}
 
 		public Point2DSmall(Vector2D vec)
 		{
 			X = vec.X;
 			Y = vec.Y;
+#if DEBUG
+			parameterCheck();
+#endif
 		}
 		public Point2DSmall(Vector2D vec, Point2DSmall origin)
 		{
 			X = vec.X + origin.X;
 			Y = vec.Y + origin.Y;
+#if DEBUG
+			parameterCheck();
+#endif
 		}
 		public Point2DSmall(Position p)
 		{
 			X = p.Column;
 			Y = p.Row;
+#if DEBUG
+			parameterCheck();
+#endif
 		}
 #if DEBUG
 		void parameterCheck()

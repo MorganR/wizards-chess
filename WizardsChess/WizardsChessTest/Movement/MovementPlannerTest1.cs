@@ -26,8 +26,8 @@ namespace WizardsChessTest
 			//String correctPoints = "start move\n[12, 3]\n[12, 7]\nend move \n";
 			//Set moves
 			//White King Pawn to E5
-			Point2D moveW1Start = new Point2D(4, 1);    //start location of the first white move (0-7, 0-7)
-			Point2D moveW1End = new Point2D(4, 3);
+			Point2DSmall moveW1Start = new Point2DSmall(4, 1);    //start location of the first white move (0-7, 0-7)
+			Point2DSmall moveW1End = new Point2DSmall(4, 3);
 
 			List<IList<Point2D>> paths = new List<IList<Point2D>>();
 			//String printString = "";
@@ -46,8 +46,8 @@ namespace WizardsChessTest
 		public void CapturingMovementTest() //tests move taking by enacting an impossible pawn zoom
 		{
 			//White King Pawn to E2 (magic!)
-			Point2D moveW1Start = new Point2D(4, 1);    //start location of the first white move (0-7, 0-7)
-			Point2D moveW1End = new Point2D(4, 6);
+			Point2DSmall moveW1Start = new Point2DSmall(4, 1);    //start location of the first white move (0-7, 0-7)
+			Point2DSmall moveW1End = new Point2DSmall(4, 6);
 
 			List<IList<Point2D>> paths = new List<IList<Point2D>>();
 			ChessBoard board = new ChessBoard();
@@ -71,14 +71,14 @@ namespace WizardsChessTest
 		{
 			//Set moves
 			//White King Side Knight to F6
-			Point2D moveW1Start = new Point2D(6, 0);	//start location of the first white move (0-7, 0-7)
-			Point2D moveW1End = new Point2D(5, 2);
+			Point2DSmall moveW1Start = new Point2DSmall(6, 0);	//start location of the first white move (0-7, 0-7)
+			Point2DSmall moveW1End = new Point2DSmall(5, 2);
 			//Black King Pawn to E4
-			Point2D moveB1Start = new Point2D(4, 6);
-			Point2D moveB1End = new Point2D(4, 4);
+			Point2DSmall moveB1Start = new Point2DSmall(4, 6);
+			Point2DSmall moveB1End = new Point2DSmall(4, 4);
 			//White Knight takes Black Pawn at E4
-			Point2D moveW2Start = moveW1End;
-			Point2D moveW2End = moveB1End;
+			Point2DSmall moveW2Start = moveW1End;
+			Point2DSmall moveW2End = moveB1End;
 
 			List<List<List<Point2D>>> listOfPaths = new List<List<List<Point2D>>>();
 			//String printString = "";
@@ -119,13 +119,13 @@ namespace WizardsChessTest
 			List<Position[]> moves = new List<Position[]>();
 
 			Position[] move = new Position[2];	//can't reuse move like that, apparently
-			move[0] = new Position("E", "2");
-			move[1] = new Position("E", "4");
+			move[0] = new Position("C", "2");
+			move[1] = new Position("C", "3");
 			moves.Add(move);
 			foreach (var movement in moves)
 			{
 				logic.IsMoveValid(movement[0], movement[1]);
-				await manager.MoveAsync(movement[0], movement[1]);
+				await manager.MoveAsync(new Point2DSmall(movement[0]), new Point2DSmall(movement[1]));
 				logic.MovePiece(movement[0], movement[1]);
 			}
 		}
@@ -180,7 +180,7 @@ namespace WizardsChessTest
 
 				System.Diagnostics.Debug.WriteLine(movement[0].ToString() + "\t" + movement[1].ToString());
 				Assert.AreEqual(logic.IsMoveValid(movement[0], movement[1]),true);
-				await manager.MoveAsync(movement[0], movement[1]);
+				await manager.MoveAsync(new Point2DSmall(movement[0]), new Point2DSmall(movement[1]));
 				logic.MovePiece(movement[0], movement[1]);
 				System.Diagnostics.Debug.WriteLine(logic.Board.ToString());
 			}
@@ -207,7 +207,7 @@ namespace WizardsChessTest
 			{
 				System.Diagnostics.Debug.WriteLine(movement[0].ToString() + "\t" + movement[1].ToString());
 				Assert.AreEqual(logic.IsMoveValid(movement[0], movement[1]), true);
-				await manager.MoveAsync(movement[0], movement[1]);
+				await manager.MoveAsync(new Point2DSmall(movement[0]), new Point2DSmall(movement[1]));
 				logic.MovePiece(movement[0], movement[1]);
 				System.Diagnostics.Debug.WriteLine(logic.Board.ToString());
 			}
@@ -229,7 +229,7 @@ namespace WizardsChessTest
 			{
 				System.Diagnostics.Debug.WriteLine(movement[0].ToString() + "\t" + movement[1].ToString());
 				Assert.AreEqual(logic.IsMoveValid(movement[0], movement[1]), true);
-				await manager.MoveAsync(movement[0], movement[1]);
+				await manager.MoveAsync(new Point2DSmall(movement[0]), new Point2DSmall(movement[1]));
 				logic.MovePiece(movement[0], movement[1]);
 				System.Diagnostics.Debug.WriteLine(logic.Board.ToString());
 			}
@@ -321,7 +321,7 @@ namespace WizardsChessTest
 			{
 				System.Diagnostics.Debug.WriteLine(movement[0].ToString() + "\t" + movement[1].ToString());
 				Assert.AreEqual(logic.IsMoveValid(movement[0], movement[1]), true);
-				await manager.MoveAsync(movement[0], movement[1]);
+				await manager.MoveAsync(new Point2DSmall(movement[0]), new Point2DSmall(movement[1]));
 				logic.MovePiece(movement[0], movement[1]);
 				System.Diagnostics.Debug.WriteLine(logic.Board.ToString());
 			}

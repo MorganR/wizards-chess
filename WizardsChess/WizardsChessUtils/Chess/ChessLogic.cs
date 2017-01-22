@@ -21,9 +21,10 @@ namespace WizardsChess.Chess
 			var pieceLocationList = board.PieceLocationsByType[piece];
 
 			var potentialPiecePositions = new HashSet<Position>();
-
+			
 			foreach (var location in pieceLocationList)
 			{
+				System.Diagnostics.Debug.WriteLine(location); //remove
 				if (IsMoveValid(new Position(location), destination))
 				{
 					potentialPiecePositions.Add(new Position(location));
@@ -105,7 +106,9 @@ namespace WizardsChess.Chess
 			}
 
 			//checks if destination is in one of the positions this piece could move (ignoring obsturctions for now)
-			var requestedMoveVector = (Point2D)endPosition - (Point2D)startPosition;
+			Point2DSmall startPoint = new Point2DSmall(startPosition);
+			Point2DSmall endPoint = new Point2DSmall(endPosition);
+			var requestedMoveVector = startPoint - endPoint;
 			bool onPieceVector = false;
 			foreach(var v in pieceMovementVectors)	//TODO: make more efficient
 			{
@@ -117,7 +120,7 @@ namespace WizardsChess.Chess
 			}
 			if (!onPieceVector)
 			{
-				System.Diagnostics.Debug.WriteLine("Destination not on this piece's vectors.");
+				System.Diagnostics.Debug.WriteLine("Destination not on this piece's vectors.");	//remove
 				return false;
 			}
 
@@ -137,10 +140,10 @@ namespace WizardsChess.Chess
 				return true;
 			}
 
-			return isPathClear(startPosition, endPosition);
+			return isPathClear(startPoint, endPoint);
 		}
 
-		//TODO: overload of: public bool IsMoveValid(Point2D, Point2D)
+		//TODO: overload of: public bool IsMoveValid(Point2DSmall, Point2DSmall)
 
 		public bool DoesMoveCapture(Position start, Position end)	//TODO: make MovePiece use DoesMoveCapture and CaptureLocation methods
 		{
@@ -169,7 +172,7 @@ namespace WizardsChess.Chess
 			
 		}
 
-		private bool isPathClear(Point2D startPosition, Point2D endPosition)
+		private bool isPathClear(Point2DSmall startPosition, Point2DSmall endPosition)
 		{
 			var requestedMoveVector = endPosition - startPosition;
 
@@ -192,17 +195,17 @@ namespace WizardsChess.Chess
 
 		//TODO: detect Checkmate
 
-		public void Castle(Point2D rookPos)
+		public void Castle(Point2DSmall rookPos)
 		{
 			board.Castle(rookPos);
 		}
 
-		public List<Point2D> validRookLocationsForCastling()
+		public List<Point2DSmall> validRookLocationsForCastling()
 		{
-			List<Point2D> validRookLocations = new List<Point2D>();
+			List<Point2DSmall> validRookLocations = new List<Point2DSmall>();
 			var kingLocations = board.PieceLocationsByType[PieceType.King];
 
-			Point2D kingLocation = new Point2D();
+			Point2DSmall kingLocation = new Point2DSmall();
 			ChessPiece king;
 
 			foreach (var aKingLocation in kingLocations)
@@ -244,7 +247,7 @@ namespace WizardsChess.Chess
 						}
 						if (Math.Abs(kingLocation.X-x) <= 2) //if the square is 1 or two over from the king, the king will pass through it, so it must not be in check
 						{
-							if (inCheck(new Point2D(x, y), board.WhoseTurn))
+							if (inCheck(new Point2DSmall(x, y), board.WhoseTurn))
 							{
 								thisSideOkay = false;
 								break;  //could be replaced with a double break of sorts, and then the valid rook adding could be without an if statement
@@ -266,7 +269,7 @@ namespace WizardsChess.Chess
 		public bool inCheck()
 		{
 			var kingLocations = board.PieceLocationsByType[PieceType.King];
-			Point2D kingLocation = new Point2D();
+			Point2DSmall kingLocation = new Point2DSmall();
 			foreach (var aKingLocation in kingLocations)
 			{
 				if (board.PieceAt(aKingLocation).Team == board.WhoseTurn)
@@ -282,7 +285,7 @@ namespace WizardsChess.Chess
 		}
 
 		// Checks if the specified location is in check for the specified team 
-		public bool inCheck(Point2D checkPoint, ChessTeam Turn)
+		public bool inCheck(Point2DSmall checkPoint, ChessTeam Turn)
 		{
 			int i, j;
 			for (i = 0; i < ChessBoard.Size; i++)
@@ -292,7 +295,7 @@ namespace WizardsChess.Chess
 					var piece = board.PieceAt(i, j);
 					if (piece != null && piece.Team != Turn)
 					{
-						if (IsCheckMoveValid(new Point2D(i,j), checkPoint))
+						if (IsCheckMoveValid(new Point2DSmall(i,j), checkPoint))
 						{
 							return true;
 						}
@@ -302,7 +305,7 @@ namespace WizardsChess.Chess
 			return false;	//TODO: remove this
 		}
 
-		public bool IsCheckMoveValid(Point2D startPoint, Point2D endPoint)
+		public bool IsCheckMoveValid(Point2DSmall startPoint, Point2DSmall endPoint)
 		{
 			// Get piece at input location
 			ChessPiece startPiece = board.PieceAt(startPoint);
@@ -356,8 +359,8 @@ namespace WizardsChess.Chess
 			return board.PieceAt(x, y);
 		}
 
-		//piece accessor by Point2D
-		public ChessPiece PieceAt(Point2D point)
+		//piece accessor by Point2DSmall
+		public ChessPiece PieceAt(Point2DSmall point)
 		{
 			return board.PieceAt(point);
 		}

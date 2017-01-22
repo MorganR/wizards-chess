@@ -15,7 +15,7 @@ namespace WizardsChess.Movement
             board = b;
         }
 
-        public List<IList<Point2D>> PlanMove(Point2D start, Point2D end, Point2D? captured=null)	//inputs (0-7, 0-7)
+        public List<IList<Point2D>> PlanMove(Point2DSmall start, Point2DSmall end, Point2DSmall? captured=null)	//inputs (0-7, 0-7)	//**
         {
             List<IList<Point2D>> paths = new List<IList<Point2D>>();
             
@@ -33,27 +33,27 @@ namespace WizardsChess.Movement
         }
 
 		//castles, moving the king over two squares, and moving the rook around it
-		public List<IList<Point2D>> PlanCastle(Point2D rookStart, int kingCol)	//rookPoint is the point in (0-7,0-7) form
+		public List<IList<Point2D>> PlanCastle(Point2DSmall rookStart, int kingCol)	//rookPoint is the point in (0-7,0-7) form
 		{
 			List<IList<Point2D>> castlePaths = new List<IList<Point2D>>();
 
 			int rookDir = Math.Sign(rookStart.X - kingCol);	//direction from King to Rook
 
 			//get King Movement
-			Point2D kingStartPoint = pointConversion(new Point2D(kingCol, rookStart.Y));
+			Point2D kingStartPoint = new Point2D(new Point2DSmall(kingCol, rookStart.Y));
 			Point2D kingEndPoint = kingStartPoint + new Vector2D(2 * spacing * rookDir, 0);	//the king moves 2 squares towards the rook
 			castlePaths.Add(getStraightMovePath(kingStartPoint, kingEndPoint));
 
-			castlePaths.Add(getCastlingRookPath(pointConversion(rookStart), rookDir, xConversion(kingCol)));  //get Rook Movement- must convert rookStart and kingCol, but rookDir is just a direction and constant
+			castlePaths.Add(getCastlingRookPath(new Point2D(rookStart), rookDir, xConversion(kingCol)));  //get Rook Movement- must convert rookStart and kingCol, but rookDir is just a direction and constant
 
 			return castlePaths;
 		}
 
 		//Point Conversions from (0-7,0-7) to (-11 to 11, -8 to 8) done here
-        private List<Point2D> getMovePath(Point2D start, Point2D end)
+        private List<Point2D> getMovePath(Point2DSmall start, Point2DSmall end)
         {
-            Point2D startPoint = pointConversion(start);
-            Point2D endPoint = pointConversion(end);
+            Point2D startPoint = new Point2D(start);    //converts Point2DSmall to Point2D
+			Point2D endPoint = new Point2D(end);    //converts Point2DSmall to Point2D
 
 			//could check for null here, if unsure if that check isn't done elsewhere
 			if (board.PieceAt(start).CanJump)
@@ -132,9 +132,9 @@ namespace WizardsChess.Movement
 
 		//gets the path of movement for a captured piece from the board to the trough
 		//expects points to be in 23x17 form
-		private List<Point2D> getCapturedPath(Point2D start) //change capturedTeam type
+		private List<Point2D> getCapturedPath(Point2DSmall start) //change capturedTeam type
         {
-            Point2D startPoint = pointConversion(start);
+            Point2D startPoint = new Point2D(start);	//converts Point2DSmall to Point2D
             ChessTeam team = board.PieceAt(start).Team; 
             int numCaptured = board.NumCapturedPieces(team);
 
@@ -177,21 +177,10 @@ namespace WizardsChess.Movement
 			rookPath.Add(rookEndPoint);
 			return rookPath;
 		}
-		
-		//converts from a (0-7,0-7) point to large coordinates (-11 to 11, -8 to 8) point
-        private Point2D pointConversion(Point2D point)
-        {
-            return new Point2D(xConversion(point.X), yConversion(point.Y));
-        }
 
-		private int xConversion(int x)
+		public int xConversion (int x)
 		{
-			return xOffset + spacing * x;
-		}
-
-		private int yConversion(int y)
-		{
-			return yOffset + spacing * y;
+			return Point2D.xOffset + Point2D.spacing * x;
 		}
 
         private IChessBoard board; 

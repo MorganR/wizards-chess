@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WizardsChess.Chess;
 using WizardsChess.Chess.Pieces;
+using WizardsChess.Movement;
 using System.Collections.Generic;
 
 namespace WizardsChessTest.Chess
@@ -30,8 +31,13 @@ namespace WizardsChessTest.Chess
 		public void LogicPieceByLocationTesting()
 		{
 			ChessLogic logic = new ChessLogic();
-			var pawnPlaces = logic.FindPotentialPiecesForMove(PieceType.Pawn, new Position("C","3"));
-			Assert.AreEqual(pawnPlaces.Count, 1);
+			System.Diagnostics.Debug.WriteLine(logic.Board.ToString());
+			var pawnPlaces1 = logic.FindPotentialPiecesForMove(PieceType.Pawn, new Position("C","3"));
+			Point2DSmall movePoint = new Point2DSmall(new Position("C", "3"));
+			System.Diagnostics.Debug.WriteLine(movePoint);
+			Assert.AreEqual(pawnPlaces1.Count, 1);
+			var pawnPlaces2 = logic.FindPotentialPiecesForMove(PieceType.Pawn, new Position("C","5"));
+			Assert.AreEqual(pawnPlaces2.Count, 0);
 		}
 		[TestMethod]
 		public void LogicUndo()

@@ -23,6 +23,12 @@ namespace WizardsChess.Movement
 			Y = p.Y;
 		}
 
+		public Vector2D(Point2DSmall p)
+		{
+			X = p.X;
+			Y = p.Y;
+		}
+
 		public int X { get; }
 		public int Y { get; }
 

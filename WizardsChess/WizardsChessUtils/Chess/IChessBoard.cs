@@ -11,10 +11,10 @@ namespace WizardsChess.Chess
 	public interface IChessBoard
 	{
 		ChessPiece PieceAt(int x, int y);
-		ChessPiece PieceAt(Point2D location);
+		ChessPiece PieceAt(Point2DSmall location);
 		ChessPiece PieceAt(Position location);
 		int NumCapturedPieces(ChessTeam team);
-		Dictionary<PieceType, IList<Point2D>> PieceLocationsByType { get; }
+		Dictionary<PieceType, IList<Point2DSmall>> PieceLocationsByType { get; }
 		IDictionary<ChessTeam, IList<ChessPiece>> CapturedPiecesByTeam { get; }
 		IList<MoveSpecification> PastMoves { get; }
 		int GetWhiteBackRow();
